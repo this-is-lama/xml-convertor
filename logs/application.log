@@ -1,0 +1,20 @@
+2025-07-17 05:08:33 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой export
+2025-07-17 05:08:33 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-17 05:09:14 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой sync
+2025-07-17 05:10:07 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой export
+2025-07-17 05:10:07 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-17 05:10:40 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой export
+2025-07-17 05:10:40 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-17 05:10:53 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой export
+2025-07-17 05:10:53 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-17 05:11:02 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой sync
+2025-07-17 05:11:02 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-17 05:11:02 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Обновление всех сущностей
+2025-07-17 05:11:02 [main] INFO  m.p.x.services.SyncService - Транзакция успешно завершена
+2025-07-17 05:11:02 [main] DEBUG m.p.x.services.SyncService - Соединение закрыто
+2025-07-17 06:18:20 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой export
+2025-07-17 06:18:20 [main] INFO  m.p.x.services.ExportService - Начало экспорта данных в файл output.xml
+2025-07-17 06:18:20 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-17 06:18:21 [main] INFO  m.p.xmlconverter.services.Converter - Конвертация сущности отдела в XML дерево
+2025-07-17 06:18:21 [main] INFO  m.p.xmlconverter.services.Converter - Успешно создан XML документ
+2025-07-17 06:18:21 [main] INFO  m.p.x.services.ExportService - Экспорт успешно завершен, файл сохранен: output.xml
