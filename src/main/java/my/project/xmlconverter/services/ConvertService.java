@@ -19,17 +19,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Утилита для преобразования между XML и объектами Department.
- * Обеспечивает двустороннюю конвертацию данных.
+ * Сервис для преобразования между XML и объектами Department.
+ * Обеспечивает двустороннюю конвертацию:
+ * - из Map<DepartmentKey, Department> в XML-документ;
+ * - из XML-файла в Map<DepartmentKey, Department>.
  */
-public class Converter {
+public class ConvertService {
 
-	private static final Logger log = LoggerFactory.getLogger(Converter.class);
+	private static final Logger log = LoggerFactory.getLogger(ConvertService.class);
 
 	/**
-	 * Преобразует множество отделов в XML документ
-	 * @param departments множество отделов
-	 * @return XML документ
+	 * Преобразует множество отделов в XML-документ.
+	 *
+	 * @param departments  множество отделов (ключ - DepartmentKey, значение - Department)
+	 * @return XML-документ, содержащий данные об отделах
+	 * @throws RuntimeException если не удалось создать XML-документ
 	 */
 	public static Document convertDepartmentToXml(Map<DepartmentKey, Department> departments) {
 		log.info("Конвертация сущности отдела в XML дерево");
@@ -43,9 +47,8 @@ public class Converter {
 			Element rootElement = doc.createElement("departments");
 
 			for (var department : departments.entrySet()) {
-				//корневой
 				Element departmentElement = doc.createElement("department");
-				//поля
+
 				Element depCodeElement = doc.createElement("depCode");
 				depCodeElement.appendChild(doc.createTextNode(department.getKey().getDepCode()));
 				departmentElement.appendChild(depCodeElement);
@@ -57,7 +60,7 @@ public class Converter {
 				Element descriptionElement = doc.createElement("description");
 				descriptionElement.appendChild(doc.createTextNode(department.getValue().getDescription()));
 				departmentElement.appendChild(descriptionElement);
-				//добавляем корень
+
 				rootElement.appendChild(departmentElement);
 			}
 
@@ -71,9 +74,11 @@ public class Converter {
 	}
 
 	/**
-	 * Преобразует XML файл в множество отделов
-	 * @param filename имя XML файла
-	 * @return множество отделов
+	 * Преобразует XML-файл в множество отделов.
+	 *
+	 * @param filename  путь к XML-файлу
+	 * @return множество отделов (ключ - DepartmentKey, значение - Department)
+	 * @throws RuntimeException если файл не существует или содержит дубликаты отделов
 	 */
 	public static Map<DepartmentKey, Department> convertXmlToDepartments(String filename) {
 		log.info("Создание объектов из XML дерева");
@@ -113,7 +118,7 @@ public class Converter {
 			}
 			log.info("Объекты успешно созданы!");
 		} catch (IOException | ParserConfigurationException | SAXException e) {
-			log.error("Oшибка чтения из файла!");
+			log.error("Ошибка чтения из файла!");
 		}
 		return departments;
 	}

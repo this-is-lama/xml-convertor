@@ -3,51 +3,74 @@ package my.project.xmlconverter.entities;
 import java.util.Objects;
 
 /**
- * Ключ департамента, состоящий из кода департамента (depCode) и должности (depJob).
- * Используется для идентификации департаментов.
+ * Составной ключ для сущности Department, состоящий из кода отдела (depCode) и должности (depJob).
+ * Используется для однозначной идентификации отделов в базе данных.
  */
 public class DepartmentKey {
 
 	/**
-	 * Код отдела
+	 * Код отдела.
 	 */
 	private String DepCode;
 
 	/**
-	 * Должность в отделе
+	 * Должность в отделе.
 	 */
 	private String DepJob;
 
 	/**
-	 * Конструктор ключа отдела
-	 * @param depCode код отдела
-	 * @param depJob должность
+	 * Конструктор для создания составного ключа отдела.
+	 *
+	 * @param depCode код отдела (не может быть null)
+	 * @param depJob  должность в отделе (не может быть null)
 	 */
 	public DepartmentKey(String depCode, String depJob) {
 		DepCode = depCode;
 		DepJob = depJob;
 	}
 
+	/**
+	 * Возвращает код отдела.
+	 *
+	 * @return код отдела
+	 */
 	public String getDepCode() {
 		return DepCode;
 	}
 
+	/**
+	 * Устанавливает код отдела.
+	 *
+	 * @param depCode код отдела
+	 */
 	public void setDepCode(String depCode) {
 		DepCode = depCode;
 	}
 
+	/**
+	 * Возвращает должность в отделе.
+	 *
+	 * @return должность
+	 */
 	public String getDepJob() {
 		return DepJob;
 	}
 
+	/**
+	 * Устанавливает должность в отделе.
+	 *
+	 * @param depJob должность
+	 */
 	public void setDepJob(String depJob) {
 		DepJob = depJob;
 	}
 
 	/**
-	 * Сравнивает ключи отделов по depCode и depJob
+	 * Сравнивает текущий ключ с другим объектом на равенство.
+	 * Два ключа считаются равными, если их depCode и depJob совпадают.
+	 *
 	 * @param object объект для сравнения
-	 * @return true если ключи равны
+	 * @return true, если ключи равны, иначе false
 	 */
 	@Override
 	public boolean equals(Object object) {
@@ -57,7 +80,8 @@ public class DepartmentKey {
 	}
 
 	/**
-	 * Возвращает хэш-код на основе depCode и depJob
+	 * Возвращает хэш-код ключа на основе полей depCode и depJob.
+	 *
 	 * @return хэш-код
 	 */
 	@Override

@@ -12,19 +12,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * DAO (Data Access Object) для работы с сущностями Department в базе данных.
- * Обеспечивает CRUD операции.
+ * Data Access Object (DAO) для работы с сущностями Department в базе данных.
+ * Обеспечивает основные CRUD-операции: сохранение, обновление, удаление и получение данных.
+ * Реализован как Singleton.
  */
 public class DepartmentDAO {
 
 	private final Logger logger = LoggerFactory.getLogger(DepartmentDAO.class);
-
 	private final static DepartmentDAO INSTANCE = new DepartmentDAO();
 
 	private DepartmentDAO() {}
 
 	/**
-	 * Возвращает единственный экземпляр DepartmentDAO (реализация Singleton)
+	 * Возвращает единственный экземпляр DepartmentDAO.
+	 *
 	 * @return экземпляр DepartmentDAO
 	 */
 	public static DepartmentDAO getInstance() {
@@ -32,9 +33,11 @@ public class DepartmentDAO {
 	}
 
 	/**
-	 * Обновляет информацию об отделах в базе данных
-	 * @param departments множество отделов для обновления
-	 * @param connection соединение с базой данных
+	 * Обновляет записи отделов в базе данных на основе переданного множества.
+	 *
+	 * @param departments  множество отделов для обновления (ключ - DepartmentKey, значение - Department)
+	 * @param connection  соединение с базой данных
+	 * @throws RuntimeException если произошла ошибка SQL
 	 */
 	public void updateAll(Map<DepartmentKey, Department> departments, Connection connection) {
 		if (departments.isEmpty()) {
@@ -58,9 +61,11 @@ public class DepartmentDAO {
 	}
 
 	/**
-	 * Удаляет отделы из базы данных
-	 * @param departments множество отделов для удаления
-	 * @param connection соединение с базой данных
+	 * Удаляет записи отделов из базы данных на основе переданного множества.
+	 *
+	 * @param departments  множество отделов для удаления (ключ - DepartmentKey, значение - Department)
+	 * @param connection  соединение с базой данных
+	 * @throws RuntimeException если произошла ошибка SQL
 	 */
 	public void deleteAll(Map<DepartmentKey, Department> departments, Connection connection) {
 		if (departments.isEmpty()) {
@@ -68,8 +73,8 @@ public class DepartmentDAO {
 		}
 		logger.info("Удаление ненужных сущностей");
 		String sqlQuery = """
-				DELETE FROM departments WHERE depcode = ? AND depjob = ?
-				""";
+                DELETE FROM departments WHERE depcode = ? AND depjob = ?
+                """;
 		try (var statement = connection.prepareStatement(sqlQuery)) {
 			for (var department : departments.entrySet()) {
 				statement.setString(1, department.getKey().getDepCode());
@@ -83,9 +88,11 @@ public class DepartmentDAO {
 	}
 
 	/**
-	 * Сохраняет новые отделы в базу данных
-	 * @param departments множество новых отделов
-	 * @param connection соединение с базой данных
+	 * Сохраняет новые записи отделов в базу данных.
+	 *
+	 * @param departments  множество новых отделов (ключ - DepartmentKey, значение - Department)
+	 * @param connection  соединение с базой данных
+	 * @throws RuntimeException если произошла ошибка SQL
 	 */
 	public void saveAll(Map<DepartmentKey, Department> departments, Connection connection) {
 		if (departments.isEmpty()) {
@@ -109,24 +116,27 @@ public class DepartmentDAO {
 	}
 
 	/**
-	 * Получает все отделы из базы данных
+	 * Возвращает все отделы из базы данных в виде Map.
+	 * Ключ - составной ключ DepartmentKey, значение - сущность Department.
+	 *
 	 * @return множество всех отделов
+	 * @throws RuntimeException если произошла ошибка SQL
 	 */
 	public Map<DepartmentKey, Department> getAll() {
 		logger.info("Получение всех сущностей");
 		HashMap<DepartmentKey, Department> departments = new HashMap<>();
 		String sqlQuery = """
-                select * from departments
+                SELECT * FROM departments
                 """;
 		try (Connection connection = ConnectionManager.openConnection();
 			 var statement = connection.prepareStatement(sqlQuery)) {
 			var resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				String DepCode = resultSet.getString("DepCode");
-				String DepName = resultSet.getString("DepJob");
-				String Description = resultSet.getString("Description");
-				DepartmentKey key = new DepartmentKey(DepCode, DepName);
-				Department department = new Department(Description);
+				String depCode = resultSet.getString("DepCode");
+				String depJob = resultSet.getString("DepJob");
+				String description = resultSet.getString("Description");
+				DepartmentKey key = new DepartmentKey(depCode, depJob);
+				Department department = new Department(description);
 				departments.put(key, department);
 			}
 		} catch (SQLException e) {

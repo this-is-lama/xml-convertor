@@ -13,8 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Сервис для синхронизации данных между базой данных и XML файлом.
- * Обеспечивает синхронизацию.
+ * Сервис для синхронизации данных между базой данных и XML-файлом.
+ * Выполняет сравнение данных и применяет изменения (вставка, обновление, удаление)
+ * в рамках транзакции.
  */
 public class SyncService {
 
@@ -22,8 +23,13 @@ public class SyncService {
 	private static final Logger log = LoggerFactory.getLogger(SyncService.class);
 
 	/**
-	 * Синхронизирует данные между базой данных и XML файлом
-	 * @param filename имя XML файла для синхронизации
+	 * Синхронизирует данные между базой данных и XML-файлом.
+	 * - Удаляет из БД записи, которых нет в XML.
+	 * - Обновляет записи с изменённым описанием.
+	 * - Добавляет новые записи из XML.
+	 *
+	 * @param filename  путь к XML-файлу для синхронизации
+	 * @throws RuntimeException если произошла ошибка SQL или синхронизации
 	 */
 	public void sync(String filename) {
 		log.info("Начало синхронизации с файлом {}", filename);
@@ -31,7 +37,7 @@ public class SyncService {
 		try {
 			connection.setAutoCommit(false);
 			Map<DepartmentKey, Department> dbDep = dao.getAll();
-			Map<DepartmentKey, Department> xmlDep = Converter.convertXmlToDepartments(filename);
+			Map<DepartmentKey, Department> xmlDep = ConvertService.convertXmlToDepartments(filename);
 
 			Map<DepartmentKey, Department> depToInsert = new HashMap<>();
 			Map<DepartmentKey, Department> depToUpdate = new HashMap<>();
