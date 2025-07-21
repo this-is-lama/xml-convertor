@@ -44,8 +44,8 @@ public class SyncService {
 			dao.updateAll(xmlDep, connection);
 
 			connection.commit();
-			log.info("Транзакция успешно завершена");
-			System.out.println("Синхронизация успешно завершена");
+			log.info("Транзакция успешно завершена!");
+			System.out.println("Синхронизация успешно завершена!");
 		} catch (SQLException e) {
 			log.error("Ошибка при синхронизации: {}", e.getMessage());
 			try {

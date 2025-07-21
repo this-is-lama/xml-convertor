@@ -9,11 +9,6 @@ import java.util.Objects;
 public class Department {
 
 	/**
-	 * Уникальный идентификатор отдела
-	 */
-	private Integer id;
-
-	/**
 	 * Ключ отдела (сочетание depCode и depJob)
 	 */
 	private DepartmentKey key;
@@ -23,29 +18,10 @@ public class Department {
 	 */
 	private String Description;
 
-	/**
-	 * Конструктор отдела
-	 * @param id идентификатор
-	 * @param key ключ отдела
-	 * @param description описание
-	 */
-	public Department(Integer id, DepartmentKey key, String description) {
-		this.id = id;
-		this.key = key;
-		Description = description;
-	}
 
 	public Department(DepartmentKey key, String description) {
 		this.key = key;
 		Description = description;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public DepartmentKey getKey() {

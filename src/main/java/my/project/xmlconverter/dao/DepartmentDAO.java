@@ -76,7 +76,7 @@ public class DepartmentDAO {
 				statement.setString(2, department.getKey().getDepJob());
 				statement.addBatch();
 			}
-			statement.executeUpdate();
+			statement.executeBatch();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
@@ -122,12 +122,11 @@ public class DepartmentDAO {
 			 var statement = connection.prepareStatement(sqlQuery)) {
 			var resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				Integer id = resultSet.getInt("id");
 				String DepCode = resultSet.getString("DepCode");
 				String DepName = resultSet.getString("DepJob");
 				String Description = resultSet.getString("Description");
 				DepartmentKey key = new DepartmentKey(DepCode, DepName);
-				Department department = new Department(id, key, Description);
+				Department department = new Department(key, Description);
 				departments.add(department);
 			}
 		} catch (SQLException e) {
