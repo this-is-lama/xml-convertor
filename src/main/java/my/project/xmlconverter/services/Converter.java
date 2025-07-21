@@ -102,7 +102,7 @@ public class Converter {
 					String depJob = eElement.getElementsByTagName("depJob").item(0).getTextContent();
 					String description = eElement.getElementsByTagName("description").item(0).getTextContent();
 					DepartmentKey key = new DepartmentKey(depCode, depJob);
-					Department department = new Department(null, key, description);
+					Department department = new Department(key, description);
 					if (!departments.contains(department)) {
 						departments.add(department);
 					} else {

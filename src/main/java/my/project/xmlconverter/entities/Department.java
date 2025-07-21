@@ -35,6 +35,11 @@ public class Department {
 		Description = description;
 	}
 
+	public Department(DepartmentKey key, String description) {
+		this.key = key;
+		Description = description;
+	}
+
 	public Integer getId() {
 		return id;
 	}
