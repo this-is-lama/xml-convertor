@@ -2,14 +2,15 @@ package my.project.xmlconverter.services;
 
 import my.project.xmlconverter.dao.DepartmentDAO;
 import my.project.xmlconverter.entities.Department;
+import my.project.xmlconverter.entities.DepartmentKey;
 import my.project.xmlconverter.utils.ConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Сервис для синхронизации данных между базой данных и XML файлом.
@@ -29,19 +30,28 @@ public class SyncService {
 		Connection connection = ConnectionManager.openConnection();
 		try {
 			connection.setAutoCommit(false);
-			Set<Department> dbDep = dao.getAll();
-			Set<Department> xmlDep = Converter.convertXmlToDepartments(filename);
+			Map<DepartmentKey, Department> dbDep = dao.getAll();
+			Map<DepartmentKey, Department> xmlDep = Converter.convertXmlToDepartments(filename);
 
-			Set<Department> setToDelete = new HashSet<>(dbDep);
-			setToDelete.removeAll(xmlDep);
-			dao.deleteAll(setToDelete, connection);
+			Map<DepartmentKey, Department> depToInsert = new HashMap<>();
+			Map<DepartmentKey, Department> depToUpdate = new HashMap<>();
 
-			Set<Department> setToInsert = new HashSet<>(xmlDep);
-			setToInsert.removeAll(dbDep);
-			dao.saveAll(setToInsert, connection);
+			for (var department : xmlDep.entrySet()) {
+				if (dbDep.containsKey(department.getKey())) {
+					Department dbDepartment = dbDep.get(department.getKey());
+					Department xmlDepartment = xmlDep.get(department.getKey());
+					if (!dbDepartment.getDescription().equals(xmlDepartment.getDescription())) {
+						depToUpdate.put(department.getKey(), xmlDepartment);
+					}
+					dbDep.remove(department.getKey());
+				} else {
+					depToInsert.put(department.getKey(), department.getValue());
+				}
+			}
 
-			xmlDep.retainAll(dbDep);
-			dao.updateAll(xmlDep, connection);
+			dao.deleteAll(dbDep, connection);
+			dao.updateAll(depToUpdate, connection);
+			dao.saveAll(depToInsert, connection);
 
 			connection.commit();
 			log.info("Транзакция успешно завершена!");

@@ -69,3 +69,26 @@
 2025-07-21 12:49:36 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Обновление всех сущностей
 2025-07-21 12:49:36 [main] INFO  m.p.x.services.SyncService - Транзакция успешно завершена!
 2025-07-21 12:49:36 [main] DEBUG m.p.x.services.SyncService - Соединение закрыто
+2025-07-21 13:59:38 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой export
+2025-07-21 13:59:38 [main] INFO  m.p.x.services.ExportService - Начало экспорта данных в файл out.xml
+2025-07-21 13:59:38 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-21 13:59:39 [main] INFO  m.p.xmlconverter.services.Converter - Конвертация сущности отдела в XML дерево
+2025-07-21 13:59:39 [main] INFO  m.p.xmlconverter.services.Converter - Успешно создан XML документ
+2025-07-21 13:59:39 [main] INFO  m.p.x.services.ExportService - Экспорт успешно завершен, файл сохранен: out.xml
+2025-07-21 14:00:36 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой sync
+2025-07-21 14:00:36 [main] INFO  m.p.x.services.SyncService - Начало синхронизации с файлом out.xml
+2025-07-21 14:00:37 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-21 14:00:37 [main] INFO  m.p.xmlconverter.services.Converter - Создание объектов из XML дерева
+2025-07-21 14:00:37 [main] INFO  m.p.xmlconverter.services.Converter - Объекты успешно созданы!
+2025-07-21 14:00:37 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Удаление ненужных сущностей
+2025-07-21 14:00:37 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Сохранение новых сущностей!
+2025-07-21 14:00:37 [main] INFO  m.p.x.services.SyncService - Транзакция успешно завершена!
+2025-07-21 14:00:37 [main] DEBUG m.p.x.services.SyncService - Соединение закрыто
+2025-07-21 14:01:12 [main] INFO  m.p.x.c.CommandLineController - Старт приложения с командой sync
+2025-07-21 14:01:12 [main] INFO  m.p.x.services.SyncService - Начало синхронизации с файлом out.xml
+2025-07-21 14:01:13 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Получение всех сущностей
+2025-07-21 14:01:13 [main] INFO  m.p.xmlconverter.services.Converter - Создание объектов из XML дерева
+2025-07-21 14:01:13 [main] INFO  m.p.xmlconverter.services.Converter - Объекты успешно созданы!
+2025-07-21 14:01:13 [main] INFO  m.p.xmlconverter.dao.DepartmentDAO - Обновление всех сущностей
+2025-07-21 14:01:13 [main] INFO  m.p.x.services.SyncService - Транзакция успешно завершена!
+2025-07-21 14:01:13 [main] DEBUG m.p.x.services.SyncService - Соединение закрыто

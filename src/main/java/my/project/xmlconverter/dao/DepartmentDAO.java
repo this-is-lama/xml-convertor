@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * DAO (Data Access Object) для работы с сущностями Department в базе данных.
@@ -36,7 +36,7 @@ public class DepartmentDAO {
 	 * @param departments множество отделов для обновления
 	 * @param connection соединение с базой данных
 	 */
-	public void updateAll(Set<Department> departments, Connection connection) {
+	public void updateAll(Map<DepartmentKey, Department> departments, Connection connection) {
 		if (departments.isEmpty()) {
 			return;
 		}
@@ -45,8 +45,8 @@ public class DepartmentDAO {
                 UPDATE departments SET description = ? WHERE depcode = ? AND depjob = ?
                 """;
 		try (var statement = connection.prepareStatement(sqlQuery)) {
-			for (Department department : departments) {
-				statement.setString(1, department.getDescription());
+			for (var department : departments.entrySet()) {
+				statement.setString(1, department.getValue().getDescription());
 				statement.setString(2, department.getKey().getDepCode());
 				statement.setString(3, department.getKey().getDepJob());
 				statement.addBatch();
@@ -62,7 +62,7 @@ public class DepartmentDAO {
 	 * @param departments множество отделов для удаления
 	 * @param connection соединение с базой данных
 	 */
-	public void deleteAll(Set<Department> departments, Connection connection) {
+	public void deleteAll(Map<DepartmentKey, Department> departments, Connection connection) {
 		if (departments.isEmpty()) {
 			return;
 		}
@@ -71,7 +71,7 @@ public class DepartmentDAO {
 				DELETE FROM departments WHERE depcode = ? AND depjob = ?
 				""";
 		try (var statement = connection.prepareStatement(sqlQuery)) {
-			for (Department department : departments) {
+			for (var department : departments.entrySet()) {
 				statement.setString(1, department.getKey().getDepCode());
 				statement.setString(2, department.getKey().getDepJob());
 				statement.addBatch();
@@ -87,7 +87,7 @@ public class DepartmentDAO {
 	 * @param departments множество новых отделов
 	 * @param connection соединение с базой данных
 	 */
-	public void saveAll(Set<Department> departments, Connection connection) {
+	public void saveAll(Map<DepartmentKey, Department> departments, Connection connection) {
 		if (departments.isEmpty()) {
 			return;
 		}
@@ -96,10 +96,10 @@ public class DepartmentDAO {
                 INSERT INTO departments (depcode, depjob, description) VALUES (?, ?, ?)
                 """;
 		try (var statement = connection.prepareStatement(sqlQuery)) {
-			for (Department department : departments) {
+			for (var department : departments.entrySet()) {
 				statement.setString(1, department.getKey().getDepCode());
 				statement.setString(2, department.getKey().getDepJob());
-				statement.setString(3, department.getDescription());
+				statement.setString(3, department.getValue().getDescription());
 				statement.addBatch();
 			}
 			statement.executeBatch();
@@ -112,9 +112,9 @@ public class DepartmentDAO {
 	 * Получает все отделы из базы данных
 	 * @return множество всех отделов
 	 */
-	public Set<Department> getAll() {
+	public Map<DepartmentKey, Department> getAll() {
 		logger.info("Получение всех сущностей");
-		Set<Department> departments = new HashSet<>();
+		HashMap<DepartmentKey, Department> departments = new HashMap<>();
 		String sqlQuery = """
                 select * from departments
                 """;
@@ -126,8 +126,8 @@ public class DepartmentDAO {
 				String DepName = resultSet.getString("DepJob");
 				String Description = resultSet.getString("Description");
 				DepartmentKey key = new DepartmentKey(DepCode, DepName);
-				Department department = new Department(key, Description);
-				departments.add(department);
+				Department department = new Department(Description);
+				departments.put(key, department);
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

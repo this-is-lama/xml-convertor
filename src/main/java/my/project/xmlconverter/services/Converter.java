@@ -15,8 +15,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Утилита для преобразования между XML и объектами Department.
@@ -31,7 +31,7 @@ public class Converter {
 	 * @param departments множество отделов
 	 * @return XML документ
 	 */
-	public static Document convertDepartmentToXml(Set<Department> departments) {
+	public static Document convertDepartmentToXml(Map<DepartmentKey, Department> departments) {
 		log.info("Конвертация сущности отдела в XML дерево");
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder;
@@ -42,7 +42,7 @@ public class Converter {
 
 			Element rootElement = doc.createElement("departments");
 
-			for (Department department : departments) {
+			for (var department : departments.entrySet()) {
 				//корневой
 				Element departmentElement = doc.createElement("department");
 				//поля
@@ -55,7 +55,7 @@ public class Converter {
 				departmentElement.appendChild(depJobElement);
 
 				Element descriptionElement = doc.createElement("description");
-				descriptionElement.appendChild(doc.createTextNode(department.getDescription()));
+				descriptionElement.appendChild(doc.createTextNode(department.getValue().getDescription()));
 				departmentElement.appendChild(descriptionElement);
 				//добавляем корень
 				rootElement.appendChild(departmentElement);
@@ -75,9 +75,9 @@ public class Converter {
 	 * @param filename имя XML файла
 	 * @return множество отделов
 	 */
-	public static Set<Department> convertXmlToDepartments(String filename) {
+	public static Map<DepartmentKey, Department> convertXmlToDepartments(String filename) {
 		log.info("Создание объектов из XML дерева");
-		Set<Department> departments = new HashSet<>();
+		Map<DepartmentKey, Department> departments = new HashMap<>();
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -102,9 +102,9 @@ public class Converter {
 					String depJob = eElement.getElementsByTagName("depJob").item(0).getTextContent();
 					String description = eElement.getElementsByTagName("description").item(0).getTextContent();
 					DepartmentKey key = new DepartmentKey(depCode, depJob);
-					Department department = new Department(key, description);
-					if (!departments.contains(department)) {
-						departments.add(department);
+					Department department = new Department(description);
+					if (!departments.containsKey(key)) {
+						departments.put(key, department);
 					} else {
 						log.error("Обнаружен дубликат департамента: {} {}", depCode, depJob);
 						throw new RuntimeException("Обнаружен дубликат департамента: " + depCode + " " + depJob);
