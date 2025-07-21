@@ -7,6 +7,11 @@ package my.project.xmlconverter.entities;
 public class Department {
 
 	/**
+	 * Идентификатор отдела.
+	 */
+	private int id;
+
+	/**
 	 * Описание отдела.
 	 */
 	private String description;
@@ -18,6 +23,24 @@ public class Department {
 	 */
 	public Department(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * Возвращает идентификатор отдела.
+	 *
+	 * @return описание
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * Устанавливает идентификатор отдела.
+	 *
+	 * @param id идентификатор
+	 */
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
