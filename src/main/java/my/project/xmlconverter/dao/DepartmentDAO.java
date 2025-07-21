@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,16 +67,14 @@ public class DepartmentDAO {
 			return;
 		}
 		logger.info("Удаление ненужных сущностей");
-		int[] ids = new int[departments.size()];
-		int i = 0;
-		for (Department department : departments) {
-			ids[i++] = department.getId();
-		}
-		String placeholders = String.join(",", Collections.nCopies(departments.size(), "?"));
-		String sqlQuery = "DELETE FROM departments WHERE id IN (" + placeholders + ")";
+		String sqlQuery = """
+				DELETE FROM departments WHERE depcode = ? AND depjob = ?
+				""";
 		try (var statement = connection.prepareStatement(sqlQuery)) {
-			for (int j = 0; j < ids.length; j++) {
-				statement.setInt(j + 1, ids[j]);
+			for (Department department : departments) {
+				statement.setString(1, department.getKey().getDepCode());
+				statement.setString(2, department.getKey().getDepJob());
+				statement.addBatch();
 			}
 			statement.executeUpdate();
 		} catch (SQLException e) {
